@@ -1,0 +1,46 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" name="H850RK3568">
+    <output-path>$PROJECT_DIR$/out/artifacts/H850RK3568</output-path>
+    <properties id="javafx-properties">
+      <options>
+        <option name="alias" />
+        <option name="appClass" value="com.yuneec.H850RK3568" />
+        <option name="convertCss2Bin" value="false" />
+        <option name="customManifestAttributes">
+          <list />
+        </option>
+        <option name="description" value="" />
+        <option name="enabledSigning" value="false" />
+        <option name="height" value="400" />
+        <option name="htmlParamFile" />
+        <option name="htmlPlaceholderId" value="" />
+        <option name="htmlTemplateFile" />
+        <option name="icons">
+          <JavaFxApplicationIcons>
+            <option name="linuxIcon" />
+            <option name="macIcon" />
+            <option name="windowsIcon" value="$PROJECT_DIR$/src/image/yuneecImageIco.ico" />
+          </JavaFxApplicationIcons>
+        </option>
+        <option name="keypass" />
+        <option name="keystore" />
+        <option name="msgOutputLevel" value="Default" />
+        <option name="nativeBundle" value="all" />
+        <option name="paramFile" />
+        <option name="selfSigning" value="true" />
+        <option name="storepass" />
+        <option name="title" value="" />
+        <option name="updateMode" value="background" />
+        <option name="vendor" value="" />
+        <option name="version" value="" />
+        <option name="width" value="600" />
+      </options>
+    </properties>
+    <root id="root">
+      <element id="archive" name="JavaFxApplication.jar">
+        <element id="module-output" name="JavaFxApplication" />
+      </element>
+      <element id="library" level="project" name="lib" />
+    </root>
+  </artifact>
+</component>
