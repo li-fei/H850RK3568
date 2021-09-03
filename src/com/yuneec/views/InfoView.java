@@ -2,12 +2,16 @@ package com.yuneec.views;
 
 
 import com.yuneec.Configs;
+import com.yuneec.Global;
 import com.yuneec.H850RK3568;
 import com.yuneec.utils.ADBUtils;
+import com.yuneec.utils.Log;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -36,7 +40,20 @@ public class InfoView {
         Button logButton = YButton.getInstance().initButton(null, "Log", new YButton.OnClickListener() {
             @Override
             public void onLeftClick() {
-                new LogView().start(new Stage());
+                LogView logView = new LogView();
+                if (!Global.LogViewIsShowing){
+                    logView.start(new Stage());
+                    Global.LogViewIsShowing = true;
+                }
+            }
+        });
+        logButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (event.getClickCount() == 3){
+                    Log.I("logButton Click 3 ...");
+                    new TestViewStage().start(new Stage());
+                }
             }
         });
         logButton.setTranslateX(30);

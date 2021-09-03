@@ -96,15 +96,15 @@ public class SocketUtil {
 
         @Override
         public void run() {
+            ByteBuffer buffer = ByteBuffer.wrap(bytes);
+            buffer.order(ByteOrder.BIG_ENDIAN);
+            int cmd = buffer.get(13) & 0x0FF;
             if (listener != null) {
-                ByteBuffer buffer = ByteBuffer.wrap(bytes);
-                buffer.order(ByteOrder.BIG_ENDIAN);
-                int cmd = buffer.get(13) & 0x0FF;
                 CommandContainer.I().mCommandListenerList.put(cmd, listener);
                 listener.setSendTimeStamp(System.currentTimeMillis());
                 listener.onStartSend();
-                Log.I("cmd: " + cmd + " send: " + BytesUtils.byteArrayToHexString(bytes, 0, bytes.length));
             }
+            Log.I("cmd: " + cmd + " send: " + BytesUtils.byteArrayToHexString(bytes, 0, bytes.length));
             sendBytes(bytes);
         }
     }

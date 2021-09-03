@@ -3,6 +3,8 @@ package com.yuneec.utils;
 import com.yuneec.command.COMMAND;
 import com.yuneec.command.CommandContainer;
 import com.yuneec.command.CommandListener;
+import com.yuneec.command.common.BaseCmd;
+import com.yuneec.command.common.CustomCommand;
 import com.yuneec.command.common.TestStartCommand;
 import com.yuneec.command.common.WifiCommand;
 
@@ -41,6 +43,8 @@ public class SendPackage {
             bytes = new WifiCommand().toRawData();
         } else if (cmd == COMMAND.CMD_TEST_START) {
             bytes = new TestStartCommand().toRawData();
+        }else {
+            bytes = new CustomCommand(cmd).toRawData();
         }
         SocketUtil.I().send(cmd, bytes, period, listener);
     }

@@ -1,10 +1,8 @@
 package com.yuneec.views;
 
 import com.yuneec.Configs;
-import com.yuneec.utils.ADBUtils;
+import com.yuneec.Global;
 import com.yuneec.utils.Log;
-import com.yuneec.utils.SendPackage;
-import com.yuneec.utils.ThreadPoolManage;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -15,11 +13,9 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -41,6 +37,7 @@ public class LogView extends Application {
     VBox vBox;
 
     private static LogView instance;
+    public Stage primaryStage;
 
     public static LogView I() {
         if (instance == null) {
@@ -50,7 +47,7 @@ public class LogView extends Application {
     }
 
     public void start(Stage primaryStage) {
-
+        this.primaryStage = primaryStage;
         rootPane = new ScrollPane();
         vBox = new VBox();
         vBox.setPadding(new Insets(5,10,5,10));
@@ -76,6 +73,7 @@ public class LogView extends Application {
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
+                Global.LogViewIsShowing = false;
                 stop();
             }
         });
