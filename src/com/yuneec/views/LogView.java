@@ -1,6 +1,7 @@
 package com.yuneec.views;
 
 import com.yuneec.Configs;
+import com.yuneec.utils.ADBUtils;
 import com.yuneec.utils.Log;
 import com.yuneec.utils.SendPackage;
 import com.yuneec.utils.ThreadPoolManage;
@@ -10,6 +11,7 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -24,7 +26,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Duration;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class LogView extends Application {
     double screenWidth,screenHeight;
@@ -66,11 +73,29 @@ public class LogView extends Application {
         primaryStage.setTitle("Log");
         primaryStage.show();
 
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                stop();
+            }
+        });
+
         showLog();
     }
 
-    private void showLog() {
-        ThreadPoolManage.I().startRunnable(showLogRunnable,100);
+    private ScheduledExecutorService scheduledExecutorService;
+
+    public void showLog() {
+        if (scheduledExecutorService == null) {
+            scheduledExecutorService = Executors.newScheduledThreadPool(128);
+        }
+        scheduledExecutorService.scheduleAtFixedRate(showLogRunnable, 0, 100, TimeUnit.MILLISECONDS);
+    }
+
+    public void stop() {
+        if (scheduledExecutorService != null) {
+            scheduledExecutorService.shutdown();
+        }
     }
 
     private Runnable showLogRunnable = new Runnable() {
@@ -78,9 +103,8 @@ public class LogView extends Application {
         public void run() {
             int len = Log.logList.size();
             if (len > 0){
-                String info = (String) Log.logList.get(len-1);
+                String info = (String) Log.logList.poll();
                 setText(info);
-                Log.logList.remove(len-1);
             }
         }
     };
@@ -109,5 +133,6 @@ public class LogView extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
 
 }
