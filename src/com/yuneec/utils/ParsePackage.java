@@ -41,12 +41,7 @@ public class ParsePackage {
                 Log.I("cmd: " + cmd + " timeout");
             }
         }
-
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                H850RK3568.testData.setText(data);
-            }
-        });
     }
+
+
 }

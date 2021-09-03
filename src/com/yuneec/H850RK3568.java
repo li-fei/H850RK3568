@@ -30,7 +30,6 @@ public class H850RK3568 extends Application {
     }
 
     public static Label labelusbStatus;
-    public static Label testData;
     public static Label errData;
     public static Label labelSocketStatus;
     public static ProgressIndicator proSocket;
@@ -57,16 +56,14 @@ public class H850RK3568 extends Application {
         HBox hBox1 = new HBox();
         hBox1.setPrefHeight(40);
         hBox1.setPadding(new Insets(5, 5, 5, 5));
-        hBox1.getChildren().addAll(labelusbStatus, labelSocketStatus, proSocket, startTest, errData);
+        hBox1.getChildren().addAll(labelusbStatus, labelSocketStatus, proSocket, startTest, errData,
+                InfoView.I().logButton());
         hBox1.setAlignment(Pos.CENTER_LEFT);
 
         HBox hBox2 = new HBox();
         hBox2.getChildren().addAll(LeftView.I().init(), RightView.I().init());
 
         vBox.getChildren().addAll(hBox1, hBox2);
-
-        testData = InfoView.I().testData();
-        vBox.getChildren().add(testData);
 
         root.setCenter(vBox);
         root.setBackground(new Background(new BackgroundFill(Color.web(Configs.backgroundColor), null, null)));

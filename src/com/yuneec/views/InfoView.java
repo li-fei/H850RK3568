@@ -3,11 +3,14 @@ package com.yuneec.views;
 
 import com.yuneec.Configs;
 import com.yuneec.H850RK3568;
+import com.yuneec.utils.ADBUtils;
 import javafx.application.Platform;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 public class InfoView {
     private static InfoView instance;
@@ -22,21 +25,26 @@ public class InfoView {
     public Label errData() {
         Label errData = new Label("");
         errData.setTextFill(Color.web(Configs.red_color));
+        errData.setPrefWidth(500);
         errData.setFont(Font.font(16));
         errData.setTranslateX(90);
         errData.setTranslateY(8);
         return errData;
     }
 
-    public Label testData() {
-        Label testData = new Label("");
-        testData.setTextFill(Color.web(Configs.white_color));
-        testData.setFont(Font.font(16));
-        testData.setTranslateX(30);
-        testData.setTranslateY(30);
-        return testData;
+    public Button logButton() {
+        Button logButton = YButton.getInstance().initButton(null, "Log", new YButton.OnClickListener() {
+            @Override
+            public void onLeftClick() {
+                new LogView().start(new Stage());
+            }
+        });
+        logButton.setTranslateX(30);
+        logButton.setTranslateY(10);
+        logButton.setPrefHeight(25);
+        logButton.setPrefWidth(40);
+        return logButton;
     }
-
 
     public Label usbStatus() {
         Label labelusbStatus = new Label("USB未连接");
