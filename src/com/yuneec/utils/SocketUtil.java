@@ -64,7 +64,7 @@ public class SocketUtil {
     }
 
     public void parse(byte[] bytes) {
-        ThreadPoolManage.I().startRunnable(new ParseRunnable(bytes), 0);
+        ThreadPoolManage.I().startRunnable(new ParseRunnable(bytes));
     }
 
     private class ParseRunnable implements Runnable {
@@ -80,9 +80,10 @@ public class SocketUtil {
         }
     }
 
-    public void send(byte[] bytes, long period, CommandListener listener) {
-        ThreadPoolManage.I().startRunnable(new SendRunnable(bytes, listener), period);
+    public void send(int cmd, byte[] bytes, long period, CommandListener listener) {
+        ThreadPoolManage.I().startRunnable(new SendRunnable(bytes, listener), period, cmd);
     }
+
 
     private class SendRunnable implements Runnable {
         private byte[] bytes;

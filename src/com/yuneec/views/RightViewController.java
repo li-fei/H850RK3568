@@ -4,16 +4,15 @@ package com.yuneec.views;
 import com.yuneec.command.BaseResponse;
 import com.yuneec.command.COMMAND;
 import com.yuneec.command.CommandListener;
-import com.yuneec.utils.BytesUtils;
-import com.yuneec.utils.Log;
-import com.yuneec.utils.SendPackage;
-import com.yuneec.utils.ThreadPoolManage;
+import com.yuneec.utils.*;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class RightViewController {
 
@@ -27,33 +26,37 @@ public class RightViewController {
     }
 
     public void sendCommand(int cmd) {
-        SendPackage.I().sendCommand(cmd, 4000, new CommandListener() {
-            @Override
-            public void onStartSend() {
-                super.onStartSend();
-                if (cmd == COMMAND.WIFI) {
+        if (cmd == COMMAND.WIFI) {
+            SendPackage.I().sendCommand(cmd, 2000, new CommandListener() {
+                @Override
+                public void onStartSend() {
+                    super.onStartSend();
                     setResult(RightView.I().wifiNodesList, TESTCODE.TESTING);
+                    Timer timer2 = new Timer();
+                    timer2.schedule(new TimerTask() {
+                        public void run() {
+                            byte[] bytes1 = new byte[]{(byte) 0xfe, (byte) 0xef, 0, 0, 0, 0x12, 0, 0, 0, 0, 0x01, 0, 0, 0x05, 2, 0, 0, 0,};
+                            ParsePackage.I().analysis(bytes1);
+                        }
+                    }, 1000);
                 }
-            }
-
-            @Override
-            public void onSuccess(BaseResponse response) {
-                super.onSuccess(response);
-                String data = BytesUtils.byteArrayToHexString(response.responseData, 0, response.responseData.length);
-                Log.I("cmd: " + cmd + " onSuccess: " + data);
-                if (cmd == COMMAND.WIFI) {
+                @Override
+                public void onSuccess(BaseResponse response) {
+                    super.onSuccess(response);
+                    String data = BytesUtils.byteArrayToHexString(response.responseData, 0, response.responseData.length);
+                    Log.I("cmd: " + cmd + " onSuccess: " + data);
                     setResult(RightView.I().wifiNodesList, TESTCODE.SUCCEED);
                 }
-            }
-
-            @Override
-            public void onTimeout() {
-                super.onTimeout();
-                if (cmd == COMMAND.WIFI) {
+                @Override
+                public void onTimeout() {
+                    super.onTimeout();
                     setResult(RightView.I().wifiNodesList, TESTCODE.TIMEOUT);
                 }
-            }
-        });
+            });
+        }else if (cmd == COMMAND.UART) {
+            ThreadPoolManage.I().stopRunnable(COMMAND.WIFI);
+        }
+
     }
 
     public static enum TESTCODE {

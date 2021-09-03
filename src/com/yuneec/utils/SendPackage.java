@@ -39,19 +39,10 @@ public class SendPackage {
 
         } else if (cmd == COMMAND.WIFI) {
             bytes = new WifiCommand().toRawData();
-
-            Timer timer2 = new Timer();
-            timer2.schedule(new TimerTask() {
-                public void run() {
-                    byte[] bytes1 = new byte[]{(byte) 0xfe, (byte) 0xef, 0, 0, 0, 0x12, 0, 0, 0, 0, 0x01, 0, 0, 0x05, 2, 0, 0, 0,};
-                    ParsePackage.I().analysis(bytes1);
-                }
-            }, 1000);
         } else if (cmd == COMMAND.CMD_TEST_START) {
             bytes = new TestStartCommand().toRawData();
         }
-
-        SocketUtil.I().send(bytes, period, listener);
+        SocketUtil.I().send(cmd, bytes, period, listener);
     }
 
     public void checkTimeoutCommand() {

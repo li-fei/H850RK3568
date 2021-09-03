@@ -1,6 +1,7 @@
 package com.yuneec.command;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledExecutorService;
 
 public class CommandContainer {
 
@@ -15,6 +16,9 @@ public class CommandContainer {
 
     public ConcurrentHashMap<Integer, CommandListener> mCommandListenerList =
             new ConcurrentHashMap<Integer, CommandListener>();
+
+    public ConcurrentHashMap<Integer, ScheduledExecutorService> mCommandThreadPoolList =
+            new ConcurrentHashMap<Integer, ScheduledExecutorService>();
 
 
 
