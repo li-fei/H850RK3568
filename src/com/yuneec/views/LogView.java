@@ -22,6 +22,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
@@ -68,6 +69,7 @@ public class LogView extends Application {
 //        primaryStage.setAlwaysOnTop(true);
 //        primaryStage.setX();
         primaryStage.setTitle("Log");
+        primaryStage.initStyle(StageStyle.DECORATED);
         primaryStage.show();
 
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -102,17 +104,26 @@ public class LogView extends Application {
             int len = Log.logList.size();
             if (len > 0){
                 String info = (String) Log.logList.poll();
-                setText(info);
+                int color = (int) Log.logList.poll();
+                setText(info,color);
             }
         }
     };
 
-    public void setText(String info){
+    public void setText(String info,int color){
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 Text testData = new Text(info);
-                testData.setFill(Color.web(Configs.grey_color));
+                if (color == 1){
+                    testData.setFill(Color.web(Configs.grey_color));
+                }else if (color == 2){
+                    testData.setFill(Color.web(Configs.red_color));
+                }else if (color == 3){
+                    testData.setFill(Color.web(Configs.yellow_color));
+                }else if (color == 4){
+                    testData.setFill(Color.web(Configs.green_color));
+                }
                 testData.setFont(Font.font(16));
                 vBox.getChildren().add(testData);
                 slowScrollToBottom(rootPane);

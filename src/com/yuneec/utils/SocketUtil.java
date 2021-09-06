@@ -35,7 +35,7 @@ public class SocketUtil {
     }
 
     private void openSocket() {
-        Log.I("openSocket()...... ");
+        Log.W("openSocket()...... ");
         try {
             socket = new Socket(host, SERVER_PORT);
             InputStream is = socket.getInputStream();

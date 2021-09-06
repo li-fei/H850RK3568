@@ -55,7 +55,7 @@ public class SendPackage {
                 CommandListener listener = CommandContainer.I().mCommandListenerList.get(key);
                 if (listener != null && (System.currentTimeMillis() - listener.getSendTimestamp() > ParsePackage.COMMAND_TIMEOUT)) {
                     listener.onTimeout();
-                    Log.I("checkTimeoutCommand command " + key + " timeout");
+                    Log.E("checkTimeoutCommand command " + key + " timeout");
                     CommandContainer.I().mCommandListenerList.remove(key);
                 }
             }

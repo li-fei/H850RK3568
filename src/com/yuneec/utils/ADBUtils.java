@@ -71,6 +71,7 @@ public class ADBUtils {
 	public String deviceName;
 	public void cmd_adbDevices(){
 		String command = "adb devices";
+		deviceName = null;
 		String result = cmd(command);
 		Platform.runLater(new Runnable() {
 			@Override
@@ -94,23 +95,26 @@ public class ADBUtils {
     public String cmd(String cmd) {
         Process p;
 		String line = null;
-		deviceName = null;
         try {
             p = Runtime.getRuntime().exec(cmd);
             InputStream fis = p.getInputStream();
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader br = new BufferedReader(isr);
             while ((line = br.readLine()) != null) {
-//                System.out.println("cmd: "+line);
-				if (line.endsWith("device")){
-					deviceName = line;
-				}
+				parseCMDInfo(line);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 		return line;
     }
+
+	private void parseCMDInfo(String line) {
+		// System.out.println("cmd: "+line);
+		if (line.endsWith("device")){
+			deviceName = line;
+		}
+	}
 
 
 }

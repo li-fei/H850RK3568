@@ -28,18 +28,18 @@ public class ParsePackage {
         int length = buffer.getInt(2);
         int cmd = buffer.get(13) & 0x0FF;
         String data = BytesUtils.byteArrayToHexString(bytes, 0, length);
-        Log.I("cmd: " + cmd + " receive: " + data);
+        Log.V("cmd: " + cmd + " receive: " + data);
 
         CommandListener listener = CommandContainer.I().mCommandListenerList.get(cmd);
         if (listener != null) {
             BaseResponse res = new BaseResponse(cmd);
             res.trans(bytes);
             listener.onSuccess(res);
-            CommandContainer.I().mCommandListenerList.remove(cmd);
             if ((System.currentTimeMillis() - listener.getSendTimestamp()) > COMMAND_TIMEOUT) {
                 listener.onTimeout();
                 Log.I("cmd: " + cmd + " timeout");
             }
+            CommandContainer.I().mCommandListenerList.remove(cmd);
         }
     }
 

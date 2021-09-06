@@ -51,7 +51,6 @@ public class InfoView {
             @Override
             public void handle(MouseEvent event) {
                 if (event.getClickCount() == 3){
-                    Log.I("logButton Click 3 ...");
                     new TestViewStage().start(new Stage());
                 }
             }
