@@ -2,7 +2,7 @@ package com.yuneec.views;
 
 
 import com.yuneec.command.BaseResponse;
-import com.yuneec.command.COMMAND;
+import com.yuneec.command.FUNC;
 import com.yuneec.command.CommandListener;
 import com.yuneec.utils.*;
 import javafx.application.Platform;
@@ -26,7 +26,7 @@ public class RightViewController {
     }
 
     public void sendCommand(int cmd) {
-        if (cmd == COMMAND.WIFI) {
+        if (cmd == FUNC.WIFI) {
             SendPackage.I().sendCommand(cmd, 2000, new CommandListener() {
                 @Override
                 public void onStartSend() {
@@ -53,8 +53,8 @@ public class RightViewController {
                     setResult(RightView.I().wifiNodesList, TESTCODE.TIMEOUT);
                 }
             });
-        }else if (cmd == COMMAND.UART) {
-            ThreadPoolManage.I().stopRunnable(COMMAND.WIFI);
+        }else if (cmd == FUNC.UART) {
+            ThreadPoolManage.I().stopRunnable(FUNC.WIFI);
         }
 
     }

@@ -3,7 +3,7 @@ package com.yuneec.utils;
 import com.yuneec.Configs;
 import com.yuneec.H850RK3568;
 import com.yuneec.command.BaseResponse;
-import com.yuneec.command.COMMAND;
+import com.yuneec.command.FUNC;
 import com.yuneec.command.CommandListener;
 import com.yuneec.views.InfoView;
 import com.yuneec.views.LeftViewController;
@@ -33,7 +33,7 @@ public class ADBUtils {
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
 			public void run() {
-				SendPackage.I().sendCommand(COMMAND.CMD_TEST_START,new CommandListener(){
+				SendPackage.I().sendCommand(FUNC.CMD_TEST_START,new CommandListener(){
 					@Override
 					public void onStartSend() {
 						super.onStartSend();

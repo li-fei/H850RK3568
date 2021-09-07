@@ -2,12 +2,11 @@ package com.yuneec.views;
 
 
 import com.yuneec.command.BaseResponse;
-import com.yuneec.command.COMMAND;
+import com.yuneec.command.FUNC;
 import com.yuneec.command.CommandListener;
 import com.yuneec.utils.BytesUtils;
 import com.yuneec.utils.Log;
 import com.yuneec.utils.SendPackage;
-import com.yuneec.utils.ThreadPoolManage;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -53,7 +52,7 @@ public class LeftViewController {
             @Override
             public void onStartSend() {
                 super.onStartSend();
-                if (cmd == COMMAND.WIFI) {
+                if (cmd == FUNC.WIFI) {
                     RightViewController.I().setResult(RightView.I().wifiNodesList, RightViewController.TESTCODE.TESTING);
                 }
             }
@@ -63,7 +62,7 @@ public class LeftViewController {
                 super.onSuccess(response);
                 String data = BytesUtils.byteArrayToHexString(response.responseData, 0, response.responseData.length);
                 Log.I("cmd: " + cmd + " onSuccess: " + data);
-                if (cmd == COMMAND.WIFI) {
+                if (cmd == FUNC.WIFI) {
                     RightViewController.I().setResult(RightView.I().wifiNodesList, RightViewController.TESTCODE.SUCCEED);
                 }
             }
@@ -71,7 +70,7 @@ public class LeftViewController {
             @Override
             public void onTimeout() {
                 super.onTimeout();
-                if (cmd == COMMAND.WIFI) {
+                if (cmd == FUNC.WIFI) {
                     RightViewController.I().setResult(RightView.I().wifiNodesList, RightViewController.TESTCODE.TIMEOUT);
                 }
             }

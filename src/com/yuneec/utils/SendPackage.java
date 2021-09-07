@@ -1,15 +1,11 @@
 package com.yuneec.utils;
 
-import com.yuneec.command.COMMAND;
+import com.yuneec.command.FUNC;
 import com.yuneec.command.CommandContainer;
 import com.yuneec.command.CommandListener;
-import com.yuneec.command.common.BaseCmd;
 import com.yuneec.command.common.CustomCommand;
 import com.yuneec.command.common.TestStartCommand;
 import com.yuneec.command.common.WifiCommand;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class SendPackage {
 
@@ -37,11 +33,11 @@ public class SendPackage {
 
     public void sendCommand(int cmd, long period, CommandListener listener) {
         byte[] bytes = null;
-        if (cmd == COMMAND.UART) {
+        if (cmd == FUNC.UART) {
 
-        } else if (cmd == COMMAND.WIFI) {
+        } else if (cmd == FUNC.WIFI) {
             bytes = new WifiCommand().toRawData();
-        } else if (cmd == COMMAND.CMD_TEST_START) {
+        } else if (cmd == FUNC.CMD_TEST_START) {
             bytes = new TestStartCommand().toRawData();
         }else {
             bytes = new CustomCommand(cmd).toRawData();

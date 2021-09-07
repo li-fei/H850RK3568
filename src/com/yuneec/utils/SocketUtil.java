@@ -98,13 +98,13 @@ public class SocketUtil {
         public void run() {
             ByteBuffer buffer = ByteBuffer.wrap(bytes);
             buffer.order(ByteOrder.BIG_ENDIAN);
-            int cmd = buffer.get(13) & 0x0FF;
+            int funcID = buffer.get(12) & 0x0FF;
             if (listener != null) {
-                CommandContainer.I().mCommandListenerList.put(cmd, listener);
+                CommandContainer.I().mCommandListenerList.put(funcID, listener);
                 listener.setSendTimeStamp(System.currentTimeMillis());
                 listener.onStartSend();
             }
-            Log.I("cmd: " + cmd + " send: " + BytesUtils.byteArrayToHexString(bytes, 0, bytes.length));
+            Log.I("funcID: " + funcID + "  send:    " + BytesUtils.byteArrayToHexString(bytes, 0, bytes.length));
             sendBytes(bytes);
         }
     }

@@ -5,7 +5,7 @@ import com.yuneec.command.BaseResponse;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-public abstract class BaseCmd {
+public abstract class BaseCommand {
 
     byte[] command = new byte[18];
 
@@ -18,11 +18,11 @@ public abstract class BaseCmd {
         buffer.putInt(2, command.length);
 
         command[6] = 0; //pkg_id
-        command[7] = 0; //prot_ver
+        command[7] = 1; //prot_ver
         command[8] = 0; //board_id
         buffer.putShort(9, (short) 1.0);// board_ver
         command[11] = 0; // term_id
-        command[12] = 0; //func_id
+        command[12] = (byte) getFuncId(); //func_id
 
         command[13] = (byte) getCommandId(); //cmd
 
@@ -32,8 +32,11 @@ public abstract class BaseCmd {
 
     }
 
-    public abstract int getCommandId();
+    public abstract int getFuncId();
 
+    public int getCommandId(){
+        return 1;
+    };
 
     public byte[] toRawData() {
         init();

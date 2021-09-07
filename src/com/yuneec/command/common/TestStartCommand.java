@@ -1,13 +1,17 @@
 package com.yuneec.command.common;
 
-import com.yuneec.command.COMMAND;
-import com.yuneec.command.common.BaseCmd;
+import com.yuneec.command.FUNC;
 
-public class TestStartCommand extends BaseCmd {
+public class TestStartCommand extends BaseCommand {
+
+    @Override
+    public int getFuncId() {
+        return FUNC.CMD_TEST_START;
+    }
 
     @Override
     public int getCommandId() {
-        return COMMAND.CMD_TEST_START;
+        return super.getCommandId();
     }
 
     @Override

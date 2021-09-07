@@ -1,6 +1,6 @@
 package com.yuneec.utils;
 
-import com.yuneec.command.COMMAND;
+import com.yuneec.command.FUNC;
 import com.yuneec.views.RightView;
 import com.yuneec.views.RightViewController;
 
@@ -16,13 +16,13 @@ public class TrueFail {
     }
 
     public void update(boolean flag, int cmd) {
-        if (cmd == COMMAND.UART) {
+        if (cmd == FUNC.UART) {
             if (flag) {
                 RightViewController.I().setResult(RightView.I().uartNodesList, RightViewController.TESTCODE.SUCCEED);
             } else {
                 RightViewController.I().setResult(RightView.I().uartNodesList, RightViewController.TESTCODE.FAILED);
             }
-        } else if (cmd == COMMAND.WIFI) {
+        } else if (cmd == FUNC.WIFI) {
             if (flag) {
                 RightViewController.I().setResult(RightView.I().wifiNodesList, RightViewController.TESTCODE.SUCCEED);
             } else {

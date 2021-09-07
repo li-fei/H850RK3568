@@ -2,7 +2,7 @@ package com.yuneec.views;
 
 
 import com.yuneec.Configs;
-import com.yuneec.command.COMMAND;
+import com.yuneec.command.FUNC;
 import com.yuneec.utils.TrueFail;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -44,8 +44,8 @@ public class RightView {
     }
 
     private void initView() {
-        uartNodesList = getHBox("串口", COMMAND.UART,false);
-        wifiNodesList = getHBox("WIFI",COMMAND.WIFI,true);
+        uartNodesList = getHBox("串口", FUNC.UART,false);
+        wifiNodesList = getHBox("WIFI", FUNC.WIFI,true);
     }
 
     private ArrayList getHBox(String name, int CMD, boolean showTrueFailBtn) {

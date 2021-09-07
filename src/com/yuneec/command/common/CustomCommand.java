@@ -1,16 +1,21 @@
 package com.yuneec.command.common;
 
-public class CustomCommand extends BaseCmd {
+public class CustomCommand extends BaseCommand {
 
-    private int cmd;
+    private int funcID;
 
-    public CustomCommand(int cmd){
-        this.cmd = cmd;
+    public CustomCommand(int funcID){
+        this.funcID = funcID;
+    }
+
+    @Override
+    public int getFuncId() {
+        return funcID;
     }
 
     @Override
     public int getCommandId() {
-        return cmd;
+        return super.getCommandId();
     }
 
     @Override

@@ -84,7 +84,7 @@ public class TestViewStage extends Application {
     }
 
     private void initTest() {
-        getHBox("发送的命令ID",true);
+        getHBox("发送的命令func_id",true);
     }
 
     private ArrayList getHBox(String name, boolean result) {
