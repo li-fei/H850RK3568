@@ -8,8 +8,8 @@ public class Configs {
 	public static String copyright = "   Copyright (C) 2021-2022 Yuneec Inc.";
 	public static String copyright_ch = "   版权所有 (C) 2021-2022 Yuneec 公司.";
 
-	public static int SceneWidth = 1000;
-	public static int SceneHeight = 600;
+	public static int SceneWidth = 1000 - 540;
+	public static int SceneHeight = 590;
 	
 	public static int MenuHeight = 30;
 	

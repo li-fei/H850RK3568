@@ -70,7 +70,7 @@ public class ADBUtils {
 
 	public String deviceName;
 	public void cmd_adbDevices(){
-		String command = "adb devices";
+		String command = "platform-tools/adb.exe devices";
 		deviceName = null;
 		String result = cmd(command);
 		Platform.runLater(new Runnable() {
@@ -88,7 +88,7 @@ public class ADBUtils {
 	}
 
     public void cmd_adbForward() {
-		String command = "adb forward tcp:6666 tcp:6666";
+		String command = "platform-tools/adb.exe forward tcp:6666 tcp:6666";
 		String result = cmd(command);
     }
 
@@ -96,18 +96,58 @@ public class ADBUtils {
         Process p;
 		String line = null;
         try {
+//			runCMD(cmd);
+			/**/
             p = Runtime.getRuntime().exec(cmd);
+//			p = Runtime.getRuntime().exec(new String[]{ "cmd", "/c", cmd});
+//			String result = InputStream2String(p.getInputStream());
+//			Log.I("cmd->" + cmd + "  ---> " + result);
+
             InputStream fis = p.getInputStream();
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader br = new BufferedReader(isr);
             while ((line = br.readLine()) != null) {
 				parseCMDInfo(line);
+				Log.I("cmd->" + cmd + "  ---> " + line);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 		return line;
     }
+	public static void runCMD(String cmd) {
+		try {
+			Process process = Runtime.getRuntime().exec(cmd);
+			SequenceInputStream sis = new SequenceInputStream(process.getInputStream(), process.getErrorStream());
+			InputStreamReader isr = new InputStreamReader(sis, "utf-8");
+			BufferedReader br = new BufferedReader(isr);
+			OutputStreamWriter osw = new OutputStreamWriter(process.getOutputStream());
+			BufferedWriter bw = new BufferedWriter(osw);
+			String line = null;
+			while (null != (line = br.readLine())) {
+				System.out.println(line);
+			}
+			process.destroy();
+			br.close();
+			isr.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static String InputStream2String(InputStream inputStream){
+		String result="";
+		BufferedReader br=new BufferedReader(new InputStreamReader(inputStream));
+		try {
+			String temp="";
+			while ((temp=br.readLine())!=null){
+				result+=temp+"\n";
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 
 	private void parseCMDInfo(String line) {
 		// System.out.println("cmd: "+line);

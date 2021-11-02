@@ -56,12 +56,13 @@ public class H850RK3568 extends Application {
         HBox hBox1 = new HBox();
         hBox1.setPrefHeight(40);
         hBox1.setPadding(new Insets(5, 5, 5, 5));
-        hBox1.getChildren().addAll(labelusbStatus, labelSocketStatus, proSocket, startTest, errData,
-                InfoView.I().logButton());
+        hBox1.getChildren().addAll(labelusbStatus, labelSocketStatus, proSocket, startTest
+//        ,errData,InfoView.I().logButton()
+        );
         hBox1.setAlignment(Pos.CENTER_LEFT);
 
         HBox hBox2 = new HBox();
-        hBox2.getChildren().addAll(LeftView.I().init(), RightView.I().init());
+        hBox2.getChildren().addAll(LeftView.I().init());
 
         vBox.getChildren().addAll(hBox1, hBox2);
 
@@ -80,6 +81,7 @@ public class H850RK3568 extends Application {
             public void handle(WindowEvent event) {
 //				event.consume();
                 ThreadPoolManage.I().stop();
+                System.exit(0);
             }
         });
 

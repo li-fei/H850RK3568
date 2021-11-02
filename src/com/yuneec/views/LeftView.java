@@ -24,9 +24,13 @@ public class LeftView {
     }
 
     VBox vBox;
-    ArrayList uartNodesList,wifiNodesList,wlanNodesList;
+
+    public ArrayList<ArrayList> nodeList = new ArrayList();
+    String[] tests = {"千兆网卡1","千兆网卡2","百兆网卡1","百兆网卡2","酷芯微","WIFI",
+            "Micro SD","USB3.0 1","USB3.0 2","UART3","UART4","UART9"};
 
     public VBox init(){
+        nodeList.clear();
         vBox = new VBox();
         vBox.setPrefWidth(400);
         vBox.setPrefHeight(500);
@@ -37,25 +41,13 @@ public class LeftView {
         vBox.setBackground(new Background(new BackgroundFill(Color.web(Configs.backgroundColor), new CornerRadii(5), new Insets(1))));
         vBox.setBorder(new Border(new BorderStroke(Paint.valueOf(Configs.blue_color),BorderStrokeStyle.SOLID,new CornerRadii(8),new BorderWidths(1.5))));
 
-        uartNodesList = getHBox("串口",true);
-        wifiNodesList = getHBox("WIFI",false);
-        wlanNodesList = getHBox("WLAN",false);
-
-//        Timer timer = new Timer();
-//        timer.schedule(new TimerTask() {
-//            public void run() {
-//                Platform.runLater(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        Y.i().setResult(wifiNodesList,Y.TESTCODE.SUCCEED);
-//                    }
-//                });
-//            }
-//        }, 5000);
+        for (int i=0;i<tests.length;i++){
+            nodeList.add(getHBox(tests[i]));
+        }
         return vBox;
     }
 
-    private ArrayList getHBox(String name, boolean result) {
+    private ArrayList getHBox(String name) {
         HBox hBox1 = new HBox();
         hBox1.setPrefWidth(300);
         hBox1.setPrefHeight(40);
