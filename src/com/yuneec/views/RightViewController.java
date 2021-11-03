@@ -68,6 +68,11 @@ public class RightViewController {
             @Override
             public void run() {
                 switch (result) {
+                    case NOTEST:
+                        ((Label) list.get(1)).setTextFill(Color.WHITE);
+                        ((Label) list.get(1)).setText("未测试");
+                        ((ProgressIndicator) list.get(2)).setOpacity(0);
+                        break;
                     case TESTING:
                         ((Label) list.get(1)).setTextFill(Color.YELLOW);
                         ((Label) list.get(1)).setText("正在测试");

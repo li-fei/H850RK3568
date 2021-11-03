@@ -1,6 +1,7 @@
 package com.yuneec.utils;
 
 import com.yuneec.Configs;
+import com.yuneec.Global;
 import com.yuneec.H850RK3568;
 import com.yuneec.command.BaseResponse;
 import com.yuneec.command.FUNC;
@@ -29,7 +30,7 @@ public class ADBUtils {
 		cmd_adbForward();
 		SocketUtil.I().listening();
 		H850RK3568.proSocket.setOpacity(1);
-		InfoView.I().updateSocketStatus("正在通信连接...",Configs.yellow_color);
+		InfoView.I().updateSocketStatus("正在通信链接...",Configs.yellow_color);
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
 			public void run() {
@@ -43,13 +44,13 @@ public class ADBUtils {
 						super.onSuccess(response);
 						LeftViewController.I().start();
 						H850RK3568.proSocket.setOpacity(0);
-						InfoView.I().updateSocketStatus("通信连接正常",Configs.green_color);
+						InfoView.I().updateSocketStatus("通信链接正常",Configs.green_color);
 					}
 					@Override
 					public void onTimeout() {
 						super.onTimeout();
 						H850RK3568.proSocket.setOpacity(0);
-						InfoView.I().updateSocketStatus("通信连接异常",Configs.red_color);
+						InfoView.I().updateSocketStatus("通信链接异常",Configs.red_color);
 						LeftViewController.I().start();
 					}
 				});
@@ -77,9 +78,13 @@ public class ADBUtils {
 			@Override
 			public void run() {
 				if (deviceName == null){
+					Global.usbConnected = false;
 					H850RK3568.labelusbStatus.setText("USB未连接!");
 					H850RK3568.labelusbStatus.setTextFill(Color.web(Configs.white_color));
+					LeftViewController.I().setNoTestInfo();
+					InfoView.I().updateSocketStatus("通信未链接",Configs.white_color);
 				}else {
+					Global.usbConnected = true;
 					H850RK3568.labelusbStatus.setText("USB已连接!");
 					H850RK3568.labelusbStatus.setTextFill(Color.GREEN);
 				}

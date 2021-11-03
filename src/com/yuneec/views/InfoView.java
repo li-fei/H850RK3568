@@ -73,8 +73,8 @@ public class InfoView {
     }
 
     public Label socketStatus() {
-        Label label = new Label("通信未连接");
-        label.setTextFill(Color.web(Configs.red_color));
+        Label label = new Label("通信未链接");
+        label.setTextFill(Color.web(Configs.white_color));
         label.setFont(Font.font(16));
         label.setPrefWidth(130);
         label.setTranslateX(30);

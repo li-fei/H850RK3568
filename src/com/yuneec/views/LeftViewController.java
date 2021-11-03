@@ -23,8 +23,19 @@ public class LeftViewController {
     }
 
     public void start() {
-        startTestUart();
-        startTestWifi();
+//        startTestUart();
+//        startTestWifi();
+        for (int i=0;i<LeftView.I().nodeList.size();i++){
+            RightViewController.I().setResult(LeftView.I().nodeList.get(i), RightViewController.TESTCODE.TESTING);
+        }
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            public void run() {
+                for (int i=0;i<LeftView.I().nodeList.size();i++){
+                    RightViewController.I().setResult(LeftView.I().nodeList.get(i), RightViewController.TESTCODE.SUCCEED);
+                }
+            }
+        }, 5000);
     }
 
     public void startTestUart() {
@@ -45,6 +56,12 @@ public class LeftViewController {
                 RightViewController.I().setResult(LeftView.I().nodeList.get(1), RightViewController.TESTCODE.FAILED);
             }
         }, 3000);
+    }
+
+    public void setNoTestInfo(){
+        for (int i=0;i<LeftView.I().nodeList.size();i++){
+            RightViewController.I().setResult(LeftView.I().nodeList.get(i), RightViewController.TESTCODE.NOTEST);
+        }
     }
 
     private void sendCommand(int cmd) {
