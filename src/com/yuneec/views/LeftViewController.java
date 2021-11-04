@@ -8,6 +8,8 @@ import com.yuneec.utils.BytesUtils;
 import com.yuneec.utils.Log;
 import com.yuneec.utils.SendPackage;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -22,30 +24,8 @@ public class LeftViewController {
         return instance;
     }
 
-    public void start() {
-//        startTestUart();
-//        startTestWifi();
-        for (int i=0;i<LeftView.I().nodeList.size();i++){
-            RightViewController.I().setResult(LeftView.I().nodeList.get(i), RightViewController.TESTCODE.TESTING);
-        }
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            public void run() {
-                for (int i=0;i<LeftView.I().nodeList.size();i++){
-                    RightViewController.I().setResult(LeftView.I().nodeList.get(i), RightViewController.TESTCODE.SUCCEED);
-                }
-            }
-        }, 5000);
-    }
-
-    public void startTestUart() {
-        RightViewController.I().setResult(LeftView.I().nodeList.get(0), RightViewController.TESTCODE.TESTING);
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            public void run() {
-                RightViewController.I().setResult(LeftView.I().nodeList.get(0), RightViewController.TESTCODE.SUCCEED);
-            }
-        }, 5000);
+    public void startAllTest() {
+        sendCommand(FUNC.ALL_TEST);
     }
 
     public void startTestWifi() {
@@ -58,9 +38,9 @@ public class LeftViewController {
         }, 3000);
     }
 
-    public void setNoTestInfo(){
+    public void setAllTestInfo(RightViewController.TESTCODE testcode){
         for (int i=0;i<LeftView.I().nodeList.size();i++){
-            RightViewController.I().setResult(LeftView.I().nodeList.get(i), RightViewController.TESTCODE.NOTEST);
+            RightViewController.I().setResult(LeftView.I().nodeList.get(i), testcode);
         }
     }
 
@@ -69,9 +49,7 @@ public class LeftViewController {
             @Override
             public void onStartSend() {
                 super.onStartSend();
-                if (cmd == FUNC.WIFI) {
-                    RightViewController.I().setResult(RightView.I().wifiNodesList, RightViewController.TESTCODE.TESTING);
-                }
+                setAllTestInfo(RightViewController.TESTCODE.TESTING);
             }
 
             @Override
@@ -79,17 +57,21 @@ public class LeftViewController {
                 super.onSuccess(response);
                 String data = BytesUtils.byteArrayToHexString(response.responseData, 0, response.responseData.length);
                 Log.I("cmd: " + cmd + " onSuccess: " + data);
-                if (cmd == FUNC.WIFI) {
-                    RightViewController.I().setResult(RightView.I().wifiNodesList, RightViewController.TESTCODE.SUCCEED);
-                }
+                byte[] rsData = response.responseData;
+                ByteBuffer buffer = ByteBuffer.wrap(rsData);
+                buffer.order(ByteOrder.BIG_ENDIAN);
+                int data_len = buffer.getShort(14) & 0xFFFF;
+                byte[] data_cont = new byte[data_len];
+                System.arraycopy(rsData,16,data_cont,0,data_len);
+                String data_cont_s = BytesUtils.byteArrayToHexString(data_cont, 0, data_len);
+                Log.I("data_cont_s: " + data_cont_s);
+                //
             }
 
             @Override
             public void onTimeout() {
                 super.onTimeout();
-                if (cmd == FUNC.WIFI) {
-                    RightViewController.I().setResult(RightView.I().wifiNodesList, RightViewController.TESTCODE.TIMEOUT);
-                }
+                setAllTestInfo(RightViewController.TESTCODE.TIMEOUT);
             }
         });
     }

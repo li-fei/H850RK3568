@@ -12,7 +12,7 @@ import java.nio.ByteOrder;
 
 public class ParsePackage {
 
-    public final static int COMMAND_TIMEOUT = 3000;
+    public final static int COMMAND_TIMEOUT = 1000 * 90;
 
     private static ParsePackage instance;
 

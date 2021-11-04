@@ -3,6 +3,7 @@ package com.yuneec.utils;
 import com.yuneec.command.FUNC;
 import com.yuneec.command.CommandContainer;
 import com.yuneec.command.CommandListener;
+import com.yuneec.command.common.AllTestCommand;
 import com.yuneec.command.common.CustomCommand;
 import com.yuneec.command.common.TestStartCommand;
 import com.yuneec.command.common.WifiCommand;
@@ -39,6 +40,8 @@ public class SendPackage {
             bytes = new WifiCommand().toRawData();
         } else if (cmd == FUNC.CMD_TEST_START) {
             bytes = new TestStartCommand().toRawData();
+        }else if (cmd == FUNC.ALL_TEST) {
+            bytes = new AllTestCommand().toRawData();
         }else {
             bytes = new CustomCommand(cmd).toRawData();
         }

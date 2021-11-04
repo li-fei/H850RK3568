@@ -8,6 +8,7 @@ import com.yuneec.command.FUNC;
 import com.yuneec.command.CommandListener;
 import com.yuneec.views.InfoView;
 import com.yuneec.views.LeftViewController;
+import com.yuneec.views.RightViewController;
 import javafx.application.Platform;
 import javafx.scene.paint.Color;
 
@@ -42,7 +43,7 @@ public class ADBUtils {
 					@Override
 					public void onSuccess(BaseResponse response) {
 						super.onSuccess(response);
-						LeftViewController.I().start();
+						LeftViewController.I().startAllTest();
 						H850RK3568.proSocket.setOpacity(0);
 						InfoView.I().updateSocketStatus("通信链接正常",Configs.green_color);
 					}
@@ -51,7 +52,7 @@ public class ADBUtils {
 						super.onTimeout();
 						H850RK3568.proSocket.setOpacity(0);
 						InfoView.I().updateSocketStatus("通信链接异常",Configs.red_color);
-						LeftViewController.I().start();
+//						LeftViewController.I().start();
 					}
 				});
 			}
@@ -81,7 +82,7 @@ public class ADBUtils {
 					Global.usbConnected = false;
 					H850RK3568.labelusbStatus.setText("USB未连接!");
 					H850RK3568.labelusbStatus.setTextFill(Color.web(Configs.white_color));
-					LeftViewController.I().setNoTestInfo();
+					LeftViewController.I().setAllTestInfo(RightViewController.TESTCODE.NOTEST);
 					InfoView.I().updateSocketStatus("通信未链接",Configs.white_color);
 				}else {
 					Global.usbConnected = true;
