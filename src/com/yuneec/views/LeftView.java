@@ -26,7 +26,7 @@ public class LeftView {
     VBox vBox;
 
     public ArrayList<ArrayList> nodeList = new ArrayList();
-    public String[] tests = {"UART3","UART4","UART9","千兆网卡1","千兆网卡2","百兆网卡1","百兆网卡2","酷芯微","WIFI",
+    public String[] tests = {"UART3","UART4","UART9","百兆网卡2","百兆网卡1","千兆网卡2","千兆网卡1","酷芯微","WIFI",
             "Micro SD","USB3.0 1","USB3.0 2"};
 
     public VBox init(){

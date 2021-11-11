@@ -28,6 +28,12 @@ public class ADBUtils {
     }
 
 	public void startTest(){
+		ThreadPoolManage.I().startRunnable(new Runnable() {
+			@Override
+			public void run() {
+				cmd("iperf-2.0.9-win64/iperf.exe -s");
+			}
+		});
 		cmd_adbForward();
 		ThreadPoolManage.I().startRunnable(new Runnable() {
 			@Override
