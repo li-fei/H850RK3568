@@ -1,15 +1,21 @@
 package com.yuneec.command.common;
 
 import com.yuneec.command.BaseResponse;
+import com.yuneec.utils.BytesUtils;
+import com.yuneec.utils.Log;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 public abstract class BaseCommand {
 
-    byte[] command = new byte[18];
+    private int data_len;
+    byte[] command;
 
     public void init(){
+        data_len = getDataCont().length;
+        command = new byte[18 + data_len];
+
         command[0] = (byte) 0xFE;
         command[1] = (byte) 0xEF;
 
@@ -26,11 +32,15 @@ public abstract class BaseCommand {
 
         command[13] = (byte) getCommandId(); //cmd
 
-        buffer.putShort(14, (short) 0); //data_len
+        buffer.putShort(14, (short) data_len); //data_len
 
-        buffer.putShort(16, (short) 0); //crc
+        System.arraycopy(getDataCont(),0,command,16,data_len);
+
+        buffer.putShort(16+data_len , (short) 0); //crc
 
     }
+
+    public abstract byte[] getDataCont();
 
     public abstract int getFuncId();
 
@@ -38,8 +48,13 @@ public abstract class BaseCommand {
         return 1;
     };
 
+    public int getTimeOut(){
+        return 1000 * 3;
+    };
+
     public byte[] toRawData() {
         init();
+//        Log.I("toRawData:" + BytesUtils.byteArrayToHexString(command, 0, command.length));
         return command;
     }
 

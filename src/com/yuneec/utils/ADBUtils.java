@@ -29,6 +29,12 @@ public class ADBUtils {
 
 	public void startTest(){
 		cmd_adbForward();
+		ThreadPoolManage.I().startRunnable(new Runnable() {
+			@Override
+			public void run() {
+				cmd("platform-tools/adb.exe shell ync_factory_test");
+			}
+		});
 		SocketUtil.I().listening();
 		H850RK3568.proSocket.setOpacity(1);
 		InfoView.I().updateSocketStatus("正在通信链接...",Configs.yellow_color);
@@ -39,13 +45,15 @@ public class ADBUtils {
 					@Override
 					public void onStartSend() {
 						super.onStartSend();
+						Log.I("onStartSend " + FUNC.CMD_TEST_START);
 					}
 					@Override
 					public void onSuccess(BaseResponse response) {
 						super.onSuccess(response);
-						LeftViewController.I().startAllTest();
+						Log.I("onSuccess " + FUNC.CMD_TEST_START);
 						H850RK3568.proSocket.setOpacity(0);
 						InfoView.I().updateSocketStatus("通信链接正常",Configs.green_color);
+						LeftViewController.I().startAllTest();
 					}
 					@Override
 					public void onTimeout() {
@@ -56,7 +64,11 @@ public class ADBUtils {
 					}
 				});
 			}
-		}, 4000);
+		}, 3000);
+	}
+
+	public void saveLog() {
+		cmd("platform-tools/adb.exe pull /ync_factory_test.log  D:\\log");
 	}
 
 	private class cmd_adbDevices_Runnable implements Runnable {
@@ -83,7 +95,9 @@ public class ADBUtils {
 					H850RK3568.labelusbStatus.setText("USB未连接!");
 					H850RK3568.labelusbStatus.setTextFill(Color.web(Configs.white_color));
 					LeftViewController.I().setAllTestInfo(RightViewController.TESTCODE.NOTEST);
+					H850RK3568.proSocket.setOpacity(0);
 					InfoView.I().updateSocketStatus("通信未链接",Configs.white_color);
+					SocketUtil.I().closeSocket();
 				}else {
 					Global.usbConnected = true;
 					H850RK3568.labelusbStatus.setText("USB已连接!");
@@ -114,7 +128,7 @@ public class ADBUtils {
             BufferedReader br = new BufferedReader(isr);
             while ((line = br.readLine()) != null) {
 				parseCMDInfo(line);
-				Log.I("cmd->" + cmd + "  ---> " + line);
+//				Log.I("cmd->" + cmd + "  ---> " + line);
             }
         } catch (Exception e) {
             e.printStackTrace();

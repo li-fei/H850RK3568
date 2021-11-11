@@ -5,14 +5,13 @@ import com.yuneec.command.BaseResponse;
 import com.yuneec.command.CMD;
 import com.yuneec.command.CommandContainer;
 import com.yuneec.command.CommandListener;
+import com.yuneec.command.common.BaseCommand;
 import javafx.application.Platform;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 public class ParsePackage {
-
-    public final static int COMMAND_TIMEOUT = 1000 * 90;
 
     private static ParsePackage instance;
 
@@ -30,22 +29,26 @@ public class ParsePackage {
         int funcID = buffer.get(12) & 0x0FF;
         int cmd = buffer.get(13) & 0x0FF;
         String data = BytesUtils.byteArrayToHexString(bytes, 0, length);
+        Log.W("1 funcID: " + funcID + " receive: " + data);
         if (cmd == CMD.CMD_ACK){
-            Log.W("funcID: " + funcID + " receive: " + data);
+//            Log.W("1 funcID: " + funcID + " receive: " + data);
             return;
         }
-        Log.V("funcID: " + funcID + " receive: " + data);
+//        Log.V("2 funcID: " + funcID + " receive: " + data);
 
         CommandListener listener = CommandContainer.I().mCommandListenerList.get(funcID);
+        BaseCommand command = CommandContainer.I().mCommandList.get(funcID);
         if (listener != null) {
+//            Log.V("*** funcID: " + funcID + " receive: " + data);
             BaseResponse res = new BaseResponse(funcID);
             res.trans(bytes);
             listener.onSuccess(res);
-            if ((System.currentTimeMillis() - listener.getSendTimestamp()) > COMMAND_TIMEOUT) {
+            if ((System.currentTimeMillis() - listener.getSendTimestamp()) > command.getTimeOut()) {
                 listener.onTimeout();
                 Log.I("funcID: " + funcID + " timeout");
             }
             CommandContainer.I().mCommandListenerList.remove(funcID);
+            CommandContainer.I().mCommandList.remove(funcID);
         }
     }
 

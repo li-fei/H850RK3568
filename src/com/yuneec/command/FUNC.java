@@ -7,5 +7,5 @@ public class FUNC {
     public static int WIFI = 5;
     public static int WLAN = 6;
 
-    public static int ALL_TEST = 9;
+    public static int ALL_TEST = 15;
 }

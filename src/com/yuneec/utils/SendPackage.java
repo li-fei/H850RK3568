@@ -1,12 +1,10 @@
 package com.yuneec.utils;
 
+import com.yuneec.Global;
 import com.yuneec.command.FUNC;
 import com.yuneec.command.CommandContainer;
 import com.yuneec.command.CommandListener;
-import com.yuneec.command.common.AllTestCommand;
-import com.yuneec.command.common.CustomCommand;
-import com.yuneec.command.common.TestStartCommand;
-import com.yuneec.command.common.WifiCommand;
+import com.yuneec.command.common.*;
 
 public class SendPackage {
 
@@ -33,26 +31,27 @@ public class SendPackage {
     }
 
     public void sendCommand(int cmd, long period, CommandListener listener) {
-        byte[] bytes = null;
+        BaseCommand command = null;
         if (cmd == FUNC.UART) {
 
         } else if (cmd == FUNC.WIFI) {
-            bytes = new WifiCommand().toRawData();
+             command = new WifiCommand();
         } else if (cmd == FUNC.CMD_TEST_START) {
-            bytes = new TestStartCommand().toRawData();
+             command = new TestStartCommand();
         }else if (cmd == FUNC.ALL_TEST) {
-            bytes = new AllTestCommand().toRawData();
+             command = new AllTestCommand(Global.HostIP);
         }else {
-            bytes = new CustomCommand(cmd).toRawData();
+             command = new CustomCommand(cmd);
         }
-        SocketUtil.I().send(cmd, bytes, period, listener);
+        SocketUtil.I().send(command, period, listener);
     }
 
     public void checkTimeoutCommand() {
         synchronized (listLock) {
             for (int key : CommandContainer.I().mCommandListenerList.keySet()) {
                 CommandListener listener = CommandContainer.I().mCommandListenerList.get(key);
-                if (listener != null && (System.currentTimeMillis() - listener.getSendTimestamp() > ParsePackage.COMMAND_TIMEOUT)) {
+                BaseCommand command = CommandContainer.I().mCommandList.get(key);
+                if (listener != null && (System.currentTimeMillis() - listener.getSendTimestamp() > command.getTimeOut())) {
                     listener.onTimeout();
                     Log.E("checkTimeoutCommand command " + key + " timeout");
                     CommandContainer.I().mCommandListenerList.remove(key);

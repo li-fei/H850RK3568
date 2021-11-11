@@ -2,6 +2,7 @@ package com.yuneec.utils;
 
 import com.yuneec.command.CommandContainer;
 import com.yuneec.command.CommandListener;
+import com.yuneec.command.common.BaseCommand;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,9 +15,11 @@ import java.util.TimerTask;
 
 public class SocketUtil {
     private Socket socket;
+    private InputStream inputStream;
     private String host = "127.0.0.1";
     private int SERVER_PORT = 6666;
     private static SocketUtil instance;
+    private boolean isOpen = false;
 
     public static SocketUtil I() {
         if (instance == null) {
@@ -38,15 +41,30 @@ public class SocketUtil {
         Log.W("openSocket()...... ");
         try {
             socket = new Socket(host, SERVER_PORT);
-            InputStream is = socket.getInputStream();
+            socket.setReuseAddress(true);
+            inputStream = socket.getInputStream();
+            isOpen = true;
             byte[] bytes = new byte[128];
             while (true) {
-                is.read(bytes);
+                inputStream.read(bytes);
                 parse(bytes);
             }
         } catch (IOException e) {
             ErrData.I().show("socket connect failed ...... ", true);
 //			e.printStackTrace();
+        }
+    }
+
+    public void closeSocket(){
+        if (socket != null){
+            try {
+                socket.close();
+                inputStream.close();
+                socket = null;
+                isOpen = false;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -64,6 +82,11 @@ public class SocketUtil {
     }
 
     public void parse(byte[] bytes) {
+        if (!isOpen){
+            return;
+        }
+        String data = BytesUtils.byteArrayToHexString(bytes, 0, bytes.length);
+        Log.W("parse : " + data);
         ThreadPoolManage.I().startRunnable(new ParseRunnable(bytes));
     }
 
@@ -80,22 +103,23 @@ public class SocketUtil {
         }
     }
 
-    public void send(int cmd, byte[] bytes, long period, CommandListener listener) {
-        ThreadPoolManage.I().startRunnable(new SendRunnable(bytes, listener), period, cmd);
+    public void send(BaseCommand command, long period, CommandListener listener) {
+        ThreadPoolManage.I().startRunnable(new SendRunnable(command, listener), period, command.getCommandId());
     }
 
 
     private class SendRunnable implements Runnable {
-        private byte[] bytes;
+        private BaseCommand command;
         private CommandListener listener;
 
-        SendRunnable(byte[] bytes, CommandListener listener) {
-            this.bytes = bytes;
+        SendRunnable(BaseCommand command, CommandListener listener) {
+            this.command = command;
             this.listener = listener;
         }
 
         @Override
         public void run() {
+            byte[] bytes = command.toRawData();
             ByteBuffer buffer = ByteBuffer.wrap(bytes);
             buffer.order(ByteOrder.BIG_ENDIAN);
             int funcID = buffer.get(12) & 0x0FF;
@@ -103,6 +127,7 @@ public class SocketUtil {
                 CommandContainer.I().mCommandListenerList.put(funcID, listener);
                 listener.setSendTimeStamp(System.currentTimeMillis());
                 listener.onStartSend();
+                CommandContainer.I().mCommandList.put(funcID, command);
             }
             Log.I("funcID: " + funcID + "  send:    " + BytesUtils.byteArrayToHexString(bytes, 0, bytes.length));
             sendBytes(bytes);

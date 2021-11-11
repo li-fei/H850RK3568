@@ -1,7 +1,9 @@
 package com.yuneec;
 
 import com.yuneec.utils.ADBUtils;
+import com.yuneec.utils.Log;
 import com.yuneec.utils.ThreadPoolManage;
+import com.yuneec.utils.Utils;
 import com.yuneec.views.InfoView;
 import com.yuneec.views.LeftView;
 import com.yuneec.views.RightView;
@@ -52,6 +54,18 @@ public class H850RK3568 extends Application {
         startTest.setTranslateX(40);
         startTest.setTranslateY(10);
         startTest.setPrefHeight(30);
+
+        Button logBtn = YButton.getInstance().initButton(null, "log", new YButton.OnClickListener() {
+            @Override
+            public void onLeftClick() {
+                ADBUtils.getInstance().saveLog();
+            }
+        });
+        logBtn.setPrefWidth(30);
+        logBtn.setTranslateX(40);
+        logBtn.setTranslateY(50);
+        logBtn.setPrefHeight(30);
+
         errData = InfoView.I().errData();
         HBox hBox1 = new HBox();
         hBox1.setPrefHeight(40);
@@ -66,6 +80,8 @@ public class H850RK3568 extends Application {
 
         vBox.getChildren().addAll(hBox1, hBox2);
 
+        vBox.getChildren().add(logBtn);
+
         root.setCenter(vBox);
         root.setBackground(new Background(new BackgroundFill(Color.web(Configs.backgroundColor), null, null)));
         Scene scene = new Scene(root, Configs.SceneWidth, Configs.SceneHeight);
@@ -73,6 +89,8 @@ public class H850RK3568 extends Application {
 //		primaryStage.setResizable(false);
         primaryStage.getIcons().add(new Image("image/launcher.png"));
         primaryStage.show();
+        Global.HostIP = Utils.getHostIP();
+        Log.I("HostIP:" + Global.HostIP);
 
         ThreadPoolManage.I().init();
 

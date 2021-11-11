@@ -5,6 +5,11 @@ import com.yuneec.command.FUNC;
 public class WifiCommand extends BaseCommand {
 
     @Override
+    public byte[] getDataCont() {
+        return new byte[0];
+    }
+
+    @Override
     public int getFuncId() {
         return FUNC.WIFI;
     }
